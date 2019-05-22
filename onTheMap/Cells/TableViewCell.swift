@@ -14,8 +14,10 @@ class OnTheMapTableViewCell: UITableViewCell {
     @IBOutlet weak var urlLabel: UILabel!
 
     func setCell(studentInformation:StudentInformation){
-        nameLabel.text = "\(studentInformation.firstName) \(studentInformation.lastName)"
-        urlLabel.text = studentInformation.mediaURL
+        var fname = studentInformation.firstName!
+        var lname = studentInformation.lastName!
+        nameLabel.text = "\(fname) \(lname)"
+        urlLabel.text = studentInformation.mediaURL!
         mapImageView.image = UIImage(named: "icon_pin")
     }
     

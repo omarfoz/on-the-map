@@ -14,29 +14,37 @@ class OnTheMapViewController: UIViewController, MKMapViewDelegate {
     // The map. See the setup in the Storyboard file. Note particularly that the view controller
     // is set up as the map view's delegate.
     @IBOutlet weak var mapView: MKMapView!
-    var annotations = [MKPointAnnotation]()
+  
     override func viewWillAppear(_ animated: Bool) {
-        addAnnotate()
+        super.viewWillAppear(animated)
+        subscribeStudentInformationNotifications()
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unsubscribeStudentInformationNotifications()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
     }
     
-    func addAnnotate(){
-        for student in OneTheMapStoreInformation.shared.arrStudentsInformation {
+    @objc func addAnnotate(){
+        var annotations = [MKPointAnnotation]()
+        for student in OneTheMapStoreInformation.shared.results {
             
             // Notice that the float values are being used to create CLLocationDegree values.
             // This is a version of the Double type.
-            let lat = CLLocationDegrees(student.latitude)
-            let long = CLLocationDegrees(student.longitude)
+            if  student.latitude != nil && student.longitude != nil {
+                let lat = CLLocationDegrees(student.latitude!)
+                let long = CLLocationDegrees(student.longitude!)
             
             // The lat and long are used to create a CLLocationCoordinates2D instance.
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
-            let first = student.firstName
-            let last = student.lastName
-            let mediaURL = student.mediaURL
+            let first = student.firstName!
+            let last = student.lastName!
+            let mediaURL = student.mediaURL!
             
             // Here we create the annotation and set its coordiate, title, and subtitle properties
             let annotation = MKPointAnnotation()
@@ -50,6 +58,7 @@ class OnTheMapViewController: UIViewController, MKMapViewDelegate {
         
         // When the array is complete, we add the annotations to the map.
         self.mapView.addAnnotations(annotations)
+        }
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -84,11 +93,31 @@ class OnTheMapViewController: UIViewController, MKMapViewDelegate {
     // to the URL specified in the annotationViews subtitle property.
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
-            let app = UIApplication.shared
             if let toOpen = view.annotation?.subtitle! {
-                app.openURL(URL(string: toOpen)!)
+                if let url = URL(string: toOpen) {
+                    let app = UIApplication.shared
+                    if app.canOpenURL(url){
+                        app.open(url, options: [:], completionHandler: nil)
+                    }else{
+                        Alert.shared.showFailureFromViewController(viewController: self, message: "Invalid Link")
+                    }
+                }else{
+                    Alert.shared.showFailureFromViewController(viewController: self, message: "No Link Found")
+                }
+                
+            }
+
             }
         }
+    
+    
+    func subscribeStudentInformationNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(addAnnotate), name: NSNotification.Name(rawValue: "studuntInformationUpdated"), object: nil)
     }
-
+    
+    
+    func unsubscribeStudentInformationNotifications() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }

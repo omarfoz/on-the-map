@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Foundation
 
 struct UdacityResponse: Codable {
     let account: Account

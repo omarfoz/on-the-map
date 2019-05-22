@@ -14,7 +14,7 @@ class PostNewLocationViewController: UIViewController {
     var location: CLLocation!
     var mediaUrl: String!
     var mapString: String!
-    
+
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {

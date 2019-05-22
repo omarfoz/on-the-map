@@ -20,7 +20,7 @@ class ParseClinet {
         var urlStrings: String {
             switch self {
             case let .studentLocation(limit):
-                return "\(EndPoints.ParseBase)?limit=\(limit)"
+                return "\(EndPoints.ParseBase)?limit=\(limit)&order=-updatedAt"
             case .postStudentLocation:
                 return "\(EndPoints.ParseBase)"
             }
@@ -30,7 +30,11 @@ class ParseClinet {
         }
     }
     
-    class func getStudnentsLocations(success: @escaping ()-> Void,errors: @escaping (Error)-> Void) {
+
+    
+    
+    class func getStudnentsLocations(success: @escaping ()-> Void, errors: @escaping (Error) -> Void) {
+        
         var request = URLRequest(url: EndPoints.studentLocation(limit: 100).url)
         request.addValue(parseAppID, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(restApiKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
@@ -48,21 +52,19 @@ class ParseClinet {
                 return
             }
             
-            let decoder = JSONDecoder()
             do {
-                
-                let studentInformationResponse = try decoder.decode(StudentInformationResponse.self, from: data)
-                
-                OneTheMapStoreInformation.shared.arrStudentsInformation = studentInformationResponse.results
+               
+                let studentsInfoResonse = try JSONDecoder().decode(StudentInformationResponse.self, from: data)
+                OneTheMapStoreInformation.shared.results  = studentsInfoResonse.results
                 DispatchQueue.main.async {
                     success()
                 }
                 
-            }
-            catch {
+            }catch{
                 DispatchQueue.main.async {
                     errors(error)
                 }
+                
             }
             
         }

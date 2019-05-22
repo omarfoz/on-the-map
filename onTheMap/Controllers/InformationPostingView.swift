@@ -14,6 +14,8 @@ class InformationPostingViewController: UIViewController {
     @IBOutlet weak var mapStrings: UITextField!
     @IBOutlet weak var url: UITextField!
     @IBOutlet weak var findLocationButton: UIButton!
+    @IBOutlet weak var activityIndcator: UIActivityIndicatorView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +83,11 @@ class InformationPostingViewController: UIViewController {
     }
     
     func setFindingLocation(_ findingLocation: Bool) {
-       
+        if findingLocation {
+            activityIndcator.startAnimating()
+        } else {
+            activityIndcator.stopAnimating()
+        }
         findLocationButton.isEnabled = !findingLocation
         mapStrings.isEnabled = !findingLocation
         url.isEnabled = !findingLocation

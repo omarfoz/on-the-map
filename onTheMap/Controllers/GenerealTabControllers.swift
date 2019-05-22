@@ -36,10 +36,13 @@ class GeneralTabBarController: UITabBarController {
     }
     
     func getStudnentsInformation(){
+        performRefereshIndicator()
         ParseClinet.getStudnentsLocations(success: {
-            
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "studuntInformationUpdated"), object: nil)
+        self.performRefereshIndicator()
             
         }) { (Error) in
+            self.performRefereshIndicator()
             self.showAlert(messege: Error.localizedDescription)
 
         }

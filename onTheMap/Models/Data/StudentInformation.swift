@@ -13,27 +13,27 @@
 import Foundation
 
 struct StudentInformation: Codable {
-    let createdAt: String
-    let firstName: String
-    let lastName: String
-    let latitude: Double
-    let longitude: Double
-    let mapString: String
-    let mediaURL: String
     let objectID: String
-    let uniqueKey: String
+    let mediaURL: String?
+    let firstName: String?
+    let longitude: Double?
+    let uniqueKey: String?
+    let latitude: Double?
+    let mapString: String?
+    let lastName: String?
+    let createdAt: String
     let updatedAt: String
     
     enum CodingKeys: String, CodingKey {
-        case createdAt = "createdAt"
-        case firstName = "firstName"
-        case lastName = "lastName"
-        case latitude = "latitude"
-        case longitude = "longitude"
-        case mapString = "mapString"
-        case mediaURL = "mediaURL"
         case objectID = "objectId"
+        case mediaURL = "mediaURL"
+        case firstName = "firstName"
+        case longitude = "longitude"
         case uniqueKey = "uniqueKey"
+        case latitude = "latitude"
+        case mapString = "mapString"
+        case lastName = "lastName"
+        case createdAt = "createdAt"
         case updatedAt = "updatedAt"
     }
 }

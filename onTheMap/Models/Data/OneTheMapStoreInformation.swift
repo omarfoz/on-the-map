@@ -10,7 +10,7 @@ import Foundation
 
 class OneTheMapStoreInformation {
     static  let  shared = OneTheMapStoreInformation()
-     var arrStudentsInformation = [StudentInformation]()
+     var results = [StudentInformation]()
     // initial User data
     static var currentUser = User(firstName:"", lastName:"", key:"")
 
